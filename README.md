@@ -21,8 +21,7 @@
 | **账号密码** | PWD_1, PWD_2, PWD_3... | your_password |
 
 ### 总结如下图
-<img width="1428" height="817" alt="image" src="https://github.com/user-attachments/assets/41fb9a16-bac5-4f95-b051-725f350d7b34" />
-
+<img width="1428" height="817" alt="26-03-10-19-44-30" src="https://github.com/user-attachments/assets/a6351243-793f-49bc-9841-c0e619ffe9e7" />
 
 【 🔄 运行逻辑 】
 - 🔍 智能扫描：自动解析 EML_N / PWD_N 系列变量，实现账号无限扩容。
