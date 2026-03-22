@@ -3,8 +3,8 @@ name: JustRunMy 自动续期 (无序随机版)
 on:
   workflow_dispatch:
   schedule:
-    # 每天北京时间 06:00 (UTC 22:00) 触发
-    - cron: '0 22 * * *'
+    # 每天北京时间 17:25 (UTC 09:25)
+    - cron: '25 9 * * *'
 
 jobs:
   setup:
@@ -17,7 +17,6 @@ jobs:
       id: check-schedule
       shell: bash
       run: |
-        # 每天执行，不再跳过
         echo "should_run=true" >> $GITHUB_OUTPUT
         echo "📅 每日签到模式已启动，所有账号将在不同时间执行"
 
@@ -28,7 +27,6 @@ jobs:
       env:
         ALL_SECRETS: ${{ toJson(secrets) }}
       run: |
-        # 提取所有 EML_x 账号索引并打乱顺序 (shuf)
         ACCOUNTS=$(echo "$ALL_SECRETS" | jq -r 'keys[] | select(startswith("EML_"))' | sed 's/EML_//' | shuf)
 
         if [ -z "$ACCOUNTS" ]; then
@@ -36,7 +34,6 @@ jobs:
           exit 1
         fi
 
-        # 生成简单账号索引数组，例如：[2,1,3]
         INDEX_ARRAY=$(echo "$ACCOUNTS" | jq -R . | jq -s -c .)
         echo "matrix=$INDEX_ARRAY" >> $GITHUB_OUTPUT
         echo "✅ 账号矩阵已构建：$INDEX_ARRAY"
@@ -46,6 +43,10 @@ jobs:
     if: needs.setup.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 360
+
+    permissions:
+      contents: write   # ⭐ 必须：允许 push time.txt
+
     strategy:
       max-parallel: 1
       fail-fast: false
@@ -87,10 +88,8 @@ jobs:
         mv "sing-box-${SINGBOX_VER}-linux-amd64/sing-box" ./sing-box
         chmod +x ./sing-box
 
-        # 生成配置文件 (调用项目中的解析脚本)
         python proxy_handler.py
 
-        # 后台运行
         nohup ./sing-box run -c config.json > singbox.log 2>&1 &
         sleep 5
 
@@ -115,7 +114,6 @@ jobs:
         PROXY_URL: ${{ secrets.PROXY_URL }}
       run: |
         echo "开始处理账号索引: ${{ matrix.account_index }}"
-        # 启动虚拟显示器并执行脚本
         xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
           python reset_timer.py
 
@@ -126,3 +124,16 @@ jobs:
         name: debug-acc-${{ matrix.account_index }}
         path: "*.png"
         retention-days: 3
+
+    # ================= 新增：防停用 =================
+    - name: 🕒 Keep Actions Alive (time.txt)
+      if: always()
+      run: |
+        echo "$(date '+%Y-%m-%d %H:%M:%S')" > time.txt
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add time.txt
+        git commit -m "chore: update time.txt to keep actions alive" || echo "No changes"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
