@@ -65,7 +65,7 @@ jobs:
     - name: ⏳ 随机延迟 (2-6小时)
       if: github.event_name == 'schedule'
       run: |
-        DELAY=$(shuf -i 7200-21600 -n 1)
+        DELAY=$(shuf -i 66-188 -n 1)
         H=$(( DELAY / 3600 ))
         M=$(( (DELAY % 3600) / 60 ))
         S=$(( DELAY % 60 ))
