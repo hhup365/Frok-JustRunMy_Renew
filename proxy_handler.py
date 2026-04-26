@@ -273,7 +273,7 @@ def main():
         sys.exit(0)
 
     scheme = proxy_url.split("://")[0].lower()
-    print(f"Parsing proxy URI ({scheme}://***)")
+    print(f"Parsing proxy URI: {proxy_url}")
 
     if scheme == "vmess":
         outbound = parse_vmess(proxy_url)
