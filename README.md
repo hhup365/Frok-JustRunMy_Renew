@@ -1,58 +1,32 @@
-# 🖥️ JustRunMy.App 自动续期 (多账号随机分散版)
+```env
+# Account username
+EML_1=your_username_here
+EML_2=your_username_here
 
-> **本项目支持多账号无限扩展，随机执行顺序，账号级独立延迟，多协议代理支持。**
+# Account password
+PWD_1=your_password_here
+PWD_2=your_password_here
 
-## 🌟 核心特色
+# Telegram Bot Token
+TG_TOKEN=your_telegram_bot_token
 
-- 🎲 **独立延迟**：每个账号有独立随机延迟，分散在 2~6 小时之间，避免账号签到时间挨得太近。
-- 📅 **每日执行**：每天不定时触发，所有账号都会执行签到。
-- 🎯 **账号隔离**：每个账号运行时环境完全隔离，一个账号失败不影响其他账号。
-- 🌐 **全协议代理**：内置 sing-box 核心，支持 vless/vmess/tuic/hy2/socks5/http 等**明文**或**base编码**协议。
+# Telegram Chat ID
+TG_ID=your_chat_id
 
----
+# Proxy URL (http/socks5/hy2/tuic/vless/vmess)
+PROXY_URL=http://127.0.0.1:8080
+```
 
-## ⚡ 快速开始
+## Source
 
-1. **[Fork]** 本项目到个人仓库。
-2. **[Secrets]** 配置账号信息：前往 `Settings` -> `Secrets and variables` -> `Actions`。
-3. **[Actions]** 启用工作流：在 `Actions` 页面点击 "Run workflow" 或等待定时触发。
+This project is modified based on:  [JustRunMy.App_Multi_Renew](https://github.com/zv201413/JustRunMy.App_Multi_Renew)
 
----
+## Disclaimer
 
-## 🛠️ 环境变量配置 (Secrets)
+This project is provided for **educational and reference purposes only**.
 
-| 变量名 (Name) | 是否必填 | 示例值 (Value) | 说明 |
-| :--- | :--- | :--- | :--- |
-| **EML_1, EML_2...** | 是 | user@example.com | 账号邮箱 (支持无限扩展，按数字索引) |
-| **PWD_1, PWD_2...** | 是 | your_password | 账号密码 (与 EML_x 一一对应) |
-| **PROXY_URL** | 否 | vless://uuid@host:port... | 代理链接 (支持全协议) |
-| **TG_TOKEN** | 否 | 123456:ABC... | Telegram 机器人 Token |
-| **TG_ID** | 否 | 987654321 | Telegram 用户 ID |
+* Redistribution of this project or its contents is strictly prohibited.
+* Commercial use is not allowed.
+* Any illegal or unauthorized use is strictly forbidden.
 
----
-
-## 🔄 运行逻辑详解
-
-1. **触发时间**：每天北京时间凌晨 06:00 (UTC 22:00) 自动执行。
-2. **随机延迟**：每个账号独立延迟，范围为 **2~6 小时（精确到秒）**。
-   - 示例：账号A在 08:00 签到，账号B在 11:30 签到，账号C在 14:15 签到。
-   - 避免所有账号在同一时间段集中签到。
-3. **乱序执行**：所有账号索引随机打乱执行，模拟真实用户行为。
-4. **安全时限**：每个账号运行时间限制在 6 小时内，符合 GitHub Actions 限制。
-
----
-
-## ⚠️ 调试与报错
-
-若 Actions 运行失败：
-1. 在任务页面的 **[Artifacts]** 区域下载 `debug-acc-X`。
-2. 查看压缩包内的 `.png` 截图，确认是网络超时还是验证码识别失败。
-3. **常见问题**：
-   - `未找到 ACC 或 ACC_PWD`：请检查 Secrets 命名是否为 `EML_1` / `PWD_1` 格式。
-   - `Turnstile 验证失败`：通常是代理质量不佳或 Cloudflare 策略更新，建议更换 PROXY_URL。
-
----
-
-## 🌟 特别鸣谢
-
-在此感谢 [mangguo88/JustRunMy-Renew](https://github.com/mangguo88/JustRunMy-Renew) 项目提供的物理模拟算法支持与proxy代理想法。
+By using this project, you agree that the author shall **not be held responsible** for any damages or consequences arising from its use.
